@@ -23,32 +23,26 @@ void countSort(int* arr, int n)
 	{
 		count[i] = 0;
 	}
-	cout << "подсчитываем частоту повторения элементов" << endl;
+
 	for(int i=0;i<n;++i)
 	{
 		count[arr[i]]++; // подсчитываем частоту повторения элементов
 		
 	}
-	for (int i = 0; i < max+1; i++)
+	for (int i = 0; i <= max; ++i)
 	{
 		cout << count[i] << " ";
 	}
 	cout << endl;
-	cout << "вычисляем накопленные частоты" << endl;
-	for (int i = 1; i <= max; ++i)
+	
+	for (int i = 0, j = 0; i <= max;i++)
 	{
-		count[i]+=count[i-1]; // вычисляем накопленные частоты
-		cout << count[i] << " ";
+		while (count[i]--)
+			output[j++] = i;
 	}
 	cout << endl;
-	cout << "устанавливаем элемент на корректное место во врременный массив" << endl;
-	for (int i = n - 1; i >= 0; --i)
-	{
-		output[count[arr[i]] - 1] = arr[i]; //устанавливаем элемент на корректное место во врременный массив
-		cout << output[i] << " ";
-		count[arr[i]]--; // уменьшаем частоту, так как уже записали элемент
-	}
-	cout << endl;
+	
+
 	for (int i = 0; i < n; i++)
 	{
 		arr[i] = output[i];
@@ -60,8 +54,6 @@ void countSort(int* arr, int n)
 
 int main()
 {
-	setlocale(LC_ALL, "");
-
 	int arr[] = { 3,5,1,2,1,0,5,4 };
 	int n = sizeof(arr) / sizeof(arr[0]); //вычисляем размер массива
 	countSort(arr, n); //вызываем сортировку
