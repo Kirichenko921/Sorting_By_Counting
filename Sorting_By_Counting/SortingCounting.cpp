@@ -1,7 +1,65 @@
-#include <iostream>
+п»ї#include <string>
+#include<fstream>
+#include<iostream>
+#include<cstdlib>
+#include <ctime>
+#include <chrono> // РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ РІСЂРµРјРµРЅРё
 using namespace std;
 
-int getMax(int *arr, int n) // фунция для нахождения максимального элемента
+void write_arr(const string& filename, const int* arr, const int n)
+{
+	fstream fs;
+	fs.open(filename, fstream::out);
+	if (fs.is_open())// РїСЂРѕРІРµСЂСЏРµРј С‡С‚Рѕ С„Р°Р№Р» СѓСЃРїРµС€РЅРѕ РѕС‚РєСЂС‹С‚
+	{
+		fs << n << '\n';//Р·Р°РїРёСЃС‹РІР°РµРј СЂР°Р·РјРµСЂ РјР°СЃСЃРёРІР°
+		for (int i = 0; i < n; i++)
+			fs << arr[i] << ' ';//Р·Р°РїРёСЃС‹РІР°РµРј Р·РЅР°С‡РµРЅРёСЏ С‡РµСЂРµР· РїСЂРѕР±РµР»
+		fs << '\n';
+
+		fs.close();//Р·Р°РєСЂС‹РІР°РµРј С„Р°Р№Р»
+	}
+}
+
+void read_arr(const string& filename, int* arr, int n)
+{
+	fstream fs;
+
+	fs.open(filename, fstream::in);
+	if (fs.is_open())// РїСЂРѕРІРµСЂСЏРµРј С‡С‚Рѕ С„Р°Р№Р» СѓСЃРїРµС€РЅРѕ РѕС‚РєСЂС‹С‚
+	{
+		fs >> n; // С‡РёС‚Р°РµРј СЂР°Р·РјРµСЂ РјР°СЃСЃРёРІР°
+		arr = new int[n];
+		for (int i = 0; i < n; ++i)
+			fs >> arr[i];// С‡РёС‚Р°РµРј РёР· С„Р°Р№Р»Р° СЂР°Р·РґРµР»РёС‚РµР»СЊРЅС‹Рµ СЃРёРјРІРѕР»С‹ - РїСЂРѕР±РµР» Рё РїРµСЂРµРЅРѕСЃ СЃС‚СЂРѕРєРё
+
+		fs.close();//Р·Р°РєСЂС‹РІР°РµРј С„Р°Р№Р»
+	}
+}
+void swap(int* a, int* b) // С„СѓРЅРєС†РёСЏ РґР»СЏ СЃРјРµРЅС‹ РјРµСЃС‚Р°РјРё РґРІСѓС… Р·РЅР°С‡РµРЅРёР№
+{
+	int temp = *a;
+	*a = *b;
+	*b = temp;
+}
+
+int partition(int* arr, int low, int high)
+{
+	int pivot = arr[high]; // РѕРїРѕСЂРЅС‹Р№ СЌР»РµРјРµРЅС‚
+	int i = (low - 1); // РёРЅРґРµРєСЃ РЅР°РёРјРµРЅСЊС€РµРіРѕ СЌР»РµРјРµРЅС‚Р°
+	for (int j = low; j <= high - 1; j++)
+	{
+		// РµСЃР»Рё С‚РµРєСѓС‰РёР№ СЌР»РµРјРµРЅС‚ РјРµРЅСЊС€Рµ РёР»Рё СЂР°РІРµРЅ РѕРїРѕСЂРЅСѓРјСѓ
+		if (arr[j] <= pivot)
+		{
+			i++; // СѓРІРµР»РёС‡РёРІР°РµРј РёРЅРґРµРєСЃ РјРёРЅРёРјР°Р»СЊРЅРѕРіРѕ СЌР»РµРјРµРЅС‚Р°
+			swap(&arr[i], &arr[j]);
+		}
+	}
+	swap(&arr[i + 1], &arr[high]);
+	return (i + 1);
+}
+int getMax(int *arr, int n) // С„СѓРЅС†РёСЏ РґР»СЏ РЅР°С…РѕР¶РґРµРЅРёСЏ РјР°РєСЃРёРјР°Р»СЊРЅРѕРіРѕ СЌР»РµРјРµРЅС‚Р°
 {
 	int max = arr[0];
 		for (int i = 1;i<n;++i)
@@ -14,11 +72,11 @@ int getMax(int *arr, int n) // фунция для нахождения максимального элемента
 
 void countSort(int* arr, int n)
 {
-	int* output = new int[n]; //выделяем память под временный массив
-	int max = getMax(arr, n); // находим максимальный элемент массива
-	int* count = new int[max + 1]; //выделяем память под массив частот
+	int* output = new int[n]; //РІС‹РґРµР»СЏРµРј РїР°РјСЏС‚СЊ РїРѕРґ РІСЂРµРјРµРЅРЅС‹Р№ РјР°СЃСЃРёРІ
+	int max = getMax(arr, n); // РЅР°С…РѕРґРёРј РјР°РєСЃРёРјР°Р»СЊРЅС‹Р№ СЌР»РµРјРµРЅС‚ РјР°СЃСЃРёРІР°
+	int* count = new int[max + 1]; //РІС‹РґРµР»СЏРµРј РїР°РјСЏС‚СЊ РїРѕРґ РјР°СЃСЃРёРІ С‡Р°СЃС‚РѕС‚
 
-	// заполняем массив нолями
+	// Р·Р°РїРѕР»РЅСЏРµРј РјР°СЃСЃРёРІ РЅРѕР»СЏРјРё
 	for(int i= 0; i<max+1;++i)
 	{
 		count[i] = 0;
@@ -26,7 +84,7 @@ void countSort(int* arr, int n)
 
 	for(int i=0;i<n;++i)
 	{
-		count[arr[i]]++; // подсчитываем частоту повторения элементов
+		count[arr[i]]++; // РїРѕРґСЃС‡РёС‚С‹РІР°РµРј С‡Р°СЃС‚РѕС‚Сѓ РїРѕРІС‚РѕСЂРµРЅРёСЏ СЌР»РµРјРµРЅС‚РѕРІ
 		
 	}
 	for (int i = 0; i <= max; ++i)
@@ -48,21 +106,23 @@ void countSort(int* arr, int n)
 		arr[i] = output[i];
 	}
 
-	delete[]output;// удаляем ненужные массивы
+	delete[]output;// СѓРґР°Р»СЏРµРј РЅРµРЅСѓР¶РЅС‹Рµ РјР°СЃСЃРёРІС‹
 	delete[]count;
 }
 
-int main()
-{
-	int arr[] = { 3,5,1,2,1,0,5,4 };
-	int n = sizeof(arr) / sizeof(arr[0]); //вычисляем размер массива
-	countSort(arr, n); //вызываем сортировку
 
-	for (int i = 0; i < n; ++i)//вывод отсортированного массива на экран
+	int main()
 	{
-		cout << arr[i] << " ";
-	}
+		int arr[] = { 3,5,1,2,1,0,5,4 };
+		int n = sizeof(arr) / sizeof(arr[0]); //
+		countSort(arr, n); //ГўГ»Г§Г»ГўГ ГҐГ¬ Г±Г®Г°ГІГЁГ°Г®ГўГЄГі
 
-	cout << endl;
+		for (int i = 0; i < n; ++i)//
+		{
+			cout << arr[i] << " ";
+		}
+
+		cout << endl;
+		return 0;
 	return 0;
 }

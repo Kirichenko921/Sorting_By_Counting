@@ -141,6 +141,9 @@
   <ItemGroup>
     <ClCompile Include="SortingCounting.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="array_big_data_little.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
